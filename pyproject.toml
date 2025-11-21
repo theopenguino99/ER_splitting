@@ -1,0 +1,10 @@
+[project]
+name = "er-splitting"
+version = "0.1.0"
+description = "ER_splitting_documentation"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "mkdocs",
+    "mkdocs-material",
+]

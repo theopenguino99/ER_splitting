@@ -1,0 +1,7 @@
+site_name: ER Splitting
+nav:
+  - Home: index.md
+  - ER Pipeline: er_pipeline.md
+theme:
+  name: material
+
