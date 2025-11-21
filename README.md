@@ -115,7 +115,6 @@ Contributions to improve or extend the documentation are welcome. When adding ne
 
 - [D2 Documentation](https://d2lang.com/)
 - [D2 Language Specification](https://d2lang.com/tour/intro)
-- Entity Resolution literature and research papers (to be added)
 
 ## License
 
