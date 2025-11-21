@@ -1,0 +1,515 @@
+title: Entity Resolution Splitting - Practical Examples {
+  near: top-center
+  shape: text
+  style: {
+    font-size: 22
+    bold: true
+  }
+}
+
+# Example 1: Customer Database Deduplication
+example1: {
+  label: "Example 1: Customer Database (100K records)"
+  
+  problem: Problem Statement {
+    shape: rectangle
+    style.fill: "#ffebee"
+    
+    details: "Deduplicate customer records\nfrom merged databases\n\nChallenges:\n• Different naming conventions\n• Address variations\n• Missing data" {
+      shape: text
+      style.font-size: 11
+    }
+  }
+  
+  solution: Solution Approach {
+    shape: rectangle
+    style.fill: "#e8f5e9"
+    
+    step1: "1. Block by phonetic name\n   (Soundex/Metaphone)" {
+      shape: rectangle
+      style.fill: "#c8e6c9"
+    }
+    
+    step2: "2. Block by ZIP code" {
+      shape: rectangle
+      style.fill: "#c8e6c9"
+    }
+    
+    step3: "3. Split into 10 partitions\n   (10K records each)" {
+      shape: rectangle
+      style.fill: "#a5d6a7"
+    }
+    
+    step4: "4. Parallel comparison\n   on 10 workers" {
+      shape: rectangle
+      style.fill: "#81c784"
+    }
+  }
+  
+  results: Results {
+    shape: rectangle
+    style.fill: "#e3f2fd"
+    
+    stats: "Processing time: 15 minutes\nDuplicates found: 8,500\nPrecision: 94%\nRecall: 89%" {
+      shape: text
+      style.font-size: 11
+    }
+  }
+  
+  problem -> solution: "Apply"
+  solution -> results: "Achieve"
+}
+
+# Example 2: Publication Matching
+example2: {
+  label: "Example 2: Academic Publication Matching (1M records)"
+  
+  scenario: Scenario {
+    shape: rectangle
+    style.fill: "#fff3e0"
+    
+    desc: "Match publications across\nmultiple databases:\n• PubMed\n• ArXiv\n• Google Scholar\n\nVariations in:\n• Author names\n• Titles\n• Publication dates" {
+      shape: text
+      style.font-size: 11
+    }
+  }
+  
+  blocking_strategy: Blocking Strategy {
+    shape: rectangle
+    style.fill: "#f3e5f5"
+    
+    b1: Title N-grams {
+      shape: rectangle
+      style.fill: "#e1bee7"
+    }
+    
+    b2: Author Last Name {
+      shape: rectangle
+      style.fill: "#e1bee7"
+    }
+    
+    b3: Publication Year {
+      shape: rectangle
+      style.fill: "#e1bee7"
+    }
+  }
+  
+  splitting_approach: Splitting Approach {
+    shape: rectangle
+    style.fill: "#e0f7fa"
+    
+    strategy: "Hash-Based Splitting\n\nHash function on:\n(first_author_lastname + year)\n\nResult: 50 partitions\nAvg size: 20K records" {
+      shape: text
+      style.font-size: 11
+    }
+  }
+  
+  distributed: Distributed Processing {
+    shape: rectangle
+    style.fill: "#f1f8e9"
+    
+    cluster: "Spark Cluster\n• 50 executors\n• 4 cores each\n• 8GB RAM per executor\n\nProcessing time: 2 hours" {
+      shape: text
+      style.font-size: 11
+    }
+  }
+  
+  scenario -> blocking_strategy
+  blocking_strategy -> splitting_approach
+  splitting_approach -> distributed
+}
+
+# Example 3: Product Catalog Integration
+example3: {
+  label: "Example 3: E-commerce Product Matching (5M products)"
+  
+  challenge: Challenge {
+    shape: rectangle
+    style.fill: "#fce4ec"
+    
+    issues: "Integrate product catalogs from:\n• Multiple vendors\n• Different languages\n• Various formats\n\nData characteristics:\n• High cardinality\n• Extreme skew (electronics >> furniture)" {
+      shape: text
+      style.font-size: 11
+    }
+  }
+  
+  initial_blocking: Initial Blocking {
+    shape: rectangle
+    style.fill: "#e1f5fe"
+    
+    method: "Category-based blocking\n\nResult:\n• 200 product categories\n• Highly imbalanced\n• Largest: 500K products\n• Smallest: 100 products" {
+      shape: text
+      style.font-size: 11
+    }
+  }
+  
+  skew_problem: Skew Detection {
+    shape: diamond
+    style.fill: "#ffccbc"
+    
+    finding: "Top 10 categories\ncontain 60% of data!" {
+      shape: text
+      style.font-size: 10
+    }
+  }
+  
+  adaptive_solution: Adaptive Solution {
+    shape: rectangle
+    style.fill: "#c8e6c9"
+    
+    approach: "Two-tier splitting:\n\n1. Large categories (>50K):\n   • Further split by brand\n   • Then by price range\n   • Result: 5-20 sub-partitions\n\n2. Small categories (<10K):\n   • Group together\n   • Single partition" {
+      shape: text
+      style.font-size: 10
+    }
+  }
+  
+  final_result: Final Distribution {
+    shape: rectangle
+    style.fill: "#dcedc8"
+    
+    outcome: "350 balanced partitions\nAvg size: 14K products\nStd dev: 3K products\n\nProcessing: 4 hours\nAccuracy: 91% F1-score" {
+      shape: text
+      style.font-size: 11
+    }
+  }
+  
+  challenge -> initial_blocking
+  initial_blocking -> skew_problem
+  skew_problem -> adaptive_solution: "Detected"
+  adaptive_solution -> final_result
+}
+
+# Example 4: Real-time Stream Processing
+example4: {
+  label: "Example 4: Real-time Entity Resolution Stream"
+  
+  stream_source: Data Stream {
+    shape: cylinder
+    style.fill: "#bbdefb"
+    
+    rate: "Incoming rate:\n10K records/minute" {
+      shape: text
+      style.font-size: 10
+    }
+  }
+  
+  window: Windowing Strategy {
+    shape: rectangle
+    style.fill: "#fff9c4"
+    
+    config: "Tumbling window:\n• Size: 1 minute\n• Buffer: 10K records\n• Trigger: time-based" {
+      shape: text
+      style.font-size: 10
+    }
+  }
+  
+  micro_batch: Micro-batch Splitting {
+    shape: rectangle
+    style.fill: "#f0f4c3"
+    
+    strategy: "Split each window:\n• Hash by entity key\n• 5 micro-batches\n• 2K records each" {
+      shape: text
+      style.font-size: 10
+    }
+  }
+  
+  parallel_workers: Parallel Workers {
+    shape: rectangle
+    style.fill: "#c5e1a5"
+    
+    w1: Worker 1 {
+      shape: rectangle
+      style.fill: "#aed581"
+    }
+    
+    w2: Worker 2 {
+      shape: rectangle
+      style.fill: "#aed581"
+    }
+    
+    w3: Worker 3 {
+      shape: rectangle
+      style.fill: "#aed581"
+    }
+    
+    w4: Worker 4 {
+      shape: rectangle
+      style.fill: "#aed581"
+    }
+    
+    w5: Worker 5 {
+      shape: rectangle
+      style.fill: "#aed581"
+    }
+  }
+  
+  merge: Stream Merge {
+    shape: rectangle
+    style.fill: "#ffecb3"
+    
+    latency: "End-to-end latency:\n< 2 seconds" {
+      shape: text
+      style.font-size: 10
+    }
+  }
+  
+  output_stream: Resolved Stream {
+    shape: cylinder
+    style.fill: "#a5d6a7"
+  }
+  
+  stream_source -> window
+  window -> micro_batch
+  micro_batch -> parallel_workers
+  parallel_workers -> merge
+  merge -> output_stream
+}
+
+# Comparison of Splitting Strategies
+comparison: {
+  label: "Strategy Comparison Table"
+  
+  table_header: {
+    strategy: Strategy {
+      shape: rectangle
+      style.fill: "#90caf9"
+    }
+    
+    pros: Advantages {
+      shape: rectangle
+      style.fill: "#90caf9"
+    }
+    
+    cons: Disadvantages {
+      shape: rectangle
+      style.fill: "#90caf9"
+    }
+    
+    use_case: Best Use Case {
+      shape: rectangle
+      style.fill: "#90caf9"
+    }
+  }
+  
+  row1: {
+    strategy: "Round-Robin" {
+      shape: rectangle
+      style.fill: "#e3f2fd"
+    }
+    
+    pros: "• Simple\n• Even distribution" {
+      shape: rectangle
+      style.fill: "#e8f5e9"
+    }
+    
+    cons: "• May split\n  related records\n• High cross-partition\n  pairs" {
+      shape: rectangle
+      style.fill: "#ffebee"
+    }
+    
+    use_case: "Uniform data\nNo clear blocking" {
+      shape: rectangle
+      style.fill: "#fff9c4"
+    }
+  }
+  
+  row2: {
+    strategy: "Hash-Based" {
+      shape: rectangle
+      style.fill: "#e3f2fd"
+    }
+    
+    pros: "• Deterministic\n• Good distribution\n• Keeps related\n  records together" {
+      shape: rectangle
+      style.fill: "#e8f5e9"
+    }
+    
+    cons: "• Sensitive to\n  key choice\n• Potential skew" {
+      shape: rectangle
+      style.fill: "#ffebee"
+    }
+    
+    use_case: "Large-scale\nDistributed systems" {
+      shape: rectangle
+      style.fill: "#fff9c4"
+    }
+  }
+  
+  row3: {
+    strategy: "Semantic" {
+      shape: rectangle
+      style.fill: "#e3f2fd"
+    }
+    
+    pros: "• Domain-aware\n• Maintains\n  context\n• High accuracy" {
+      shape: rectangle
+      style.fill: "#e8f5e9"
+    }
+    
+    cons: "• Requires domain\n  knowledge\n• May be unbalanced" {
+      shape: rectangle
+      style.fill: "#ffebee"
+    }
+    
+    use_case: "Heterogeneous\nMulti-domain data" {
+      shape: rectangle
+      style.fill: "#fff9c4"
+    }
+  }
+  
+  row4: {
+    strategy: "Adaptive" {
+      shape: rectangle
+      style.fill: "#e3f2fd"
+    }
+    
+    pros: "• Optimizes based\n  on data\n• Handles skew\n• Flexible" {
+      shape: rectangle
+      style.fill: "#e8f5e9"
+    }
+    
+    cons: "• Complex\n• Overhead from\n  analysis\n• May need tuning" {
+      shape: rectangle
+      style.fill: "#ffebee"
+    }
+    
+    use_case: "Variable workloads\nUnknown distribution" {
+      shape: rectangle
+      style.fill: "#fff9c4"
+    }
+  }
+}
+
+# Performance Scaling
+scaling: {
+  label: "Performance Scaling Analysis"
+  
+  dataset_size: Dataset Size {
+    shape: rectangle
+    style.fill: "#e1f5fe"
+    
+    small: "Small\n(< 100K)" {
+      shape: rectangle
+      style.fill: "#b3e5fc"
+    }
+    
+    medium: "Medium\n(100K - 1M)" {
+      shape: rectangle
+      style.fill: "#81d4fa"
+    }
+    
+    large: "Large\n(1M - 10M)" {
+      shape: rectangle
+      style.fill: "#4fc3f7"
+    }
+    
+    xlarge: "Extra Large\n(> 10M)" {
+      shape: rectangle
+      style.fill: "#29b6f6"
+    }
+  }
+  
+  recommended: Recommended Approach {
+    shape: rectangle
+    style.fill: "#f1f8e9"
+    
+    r_small: "No splitting\nSingle machine" {
+      shape: rectangle
+      style.fill: "#dcedc8"
+    }
+    
+    r_medium: "Simple splitting\n5-10 partitions" {
+      shape: rectangle
+      style.fill: "#c5e1a5"
+    }
+    
+    r_large: "Hash-based\n50-100 partitions" {
+      shape: rectangle
+      style.fill: "#aed581"
+    }
+    
+    r_xlarge: "Adaptive\n100-1000 partitions" {
+      shape: rectangle
+      style.fill: "#9ccc65"
+    }
+  }
+  
+  dataset_size.small -> recommended.r_small
+  dataset_size.medium -> recommended.r_medium
+  dataset_size.large -> recommended.r_large
+  dataset_size.xlarge -> recommended.r_xlarge
+}
+
+# Error Handling in Splitting
+error_handling: {
+  label: "Error Handling and Recovery"
+  
+  potential_errors: Potential Issues {
+    shape: rectangle
+    style.fill: "#ffccbc"
+    
+    e1: "Partition\nFailure" {
+      shape: rectangle
+      style.fill: "#ffab91"
+    }
+    
+    e2: "Memory\nOverflow" {
+      shape: rectangle
+      style.fill: "#ffab91"
+    }
+    
+    e3: "Network\nTimeout" {
+      shape: rectangle
+      style.fill: "#ffab91"
+    }
+    
+    e4: "Data\nCorruption" {
+      shape: rectangle
+      style.fill: "#ffab91"
+    }
+  }
+  
+  recovery: Recovery Strategies {
+    shape: rectangle
+    style.fill: "#c8e6c9"
+    
+    r1: "Retry with\nbackoff" {
+      shape: rectangle
+      style.fill: "#a5d6a7"
+    }
+    
+    r2: "Dynamic\nresizing" {
+      shape: rectangle
+      style.fill: "#a5d6a7"
+    }
+    
+    r3: "Circuit\nbreaker" {
+      shape: rectangle
+      style.fill: "#a5d6a7"
+    }
+    
+    r4: "Checkpointing" {
+      shape: rectangle
+      style.fill: "#a5d6a7"
+    }
+  }
+  
+  potential_errors.e1 -> recovery.r1
+  potential_errors.e2 -> recovery.r2
+  potential_errors.e3 -> recovery.r3
+  potential_errors.e4 -> recovery.r4
+}
+
+# Implementation Tips
+tips: {
+  label: "Implementation Tips"
+  shape: rectangle
+  style.fill: "#fff3e0"
+  style.stroke: "#ff6f00"
+  style.stroke-width: 2
+  
+  content: "**Practical Recommendations:**\n\n**1. Start Simple**\n   • Begin with fixed-size splits\n   • Profile and measure\n   • Optimize incrementally\n\n**2. Monitor Key Metrics**\n   • Partition size distribution\n   • Cross-partition comparisons\n   • Worker utilization\n   • End-to-end latency\n\n**3. Test with Real Data**\n   • Use production-like datasets\n   • Test edge cases\n   • Measure accuracy impact\n\n**4. Plan for Failure**\n   • Implement retries\n   • Save checkpoints\n   • Monitor health\n\n**5. Document Decisions**\n   • Record parameter choices\n   • Track performance\n   • Share learnings" {
+    shape: text
+    style.font-size: 11
+  }
+}

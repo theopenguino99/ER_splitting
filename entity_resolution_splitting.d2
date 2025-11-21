@@ -1,0 +1,545 @@
+title: Entity Resolution Splitting Logic {
+  near: top-center
+  shape: text
+  style: {
+    font-size: 24
+    bold: true
+  }
+}
+
+# Overview of Entity Resolution Process
+overview: {
+  label: "Entity Resolution Overview"
+  
+  input_data: Input Data Sources {
+    shape: cylinder
+    style.fill: "#e3f2fd"
+  }
+  
+  preprocessing: Data Preprocessing {
+    shape: rectangle
+    style.fill: "#fff3e0"
+  }
+  
+  blocking: Blocking/Indexing {
+    shape: rectangle
+    style.fill: "#f3e5f5"
+  }
+  
+  splitting: Splitting Logic {
+    shape: rectangle
+    style.fill: "#e8f5e9"
+    style.stroke: "#2e7d32"
+    style.stroke-width: 3
+  }
+  
+  comparison: Record Comparison {
+    shape: rectangle
+    style.fill: "#fce4ec"
+  }
+  
+  classification: Classification {
+    shape: rectangle
+    style.fill: "#e1f5fe"
+  }
+  
+  clustering: Clustering/Merging {
+    shape: rectangle
+    style.fill: "#fff9c4"
+  }
+  
+  output: Resolved Entities {
+    shape: cylinder
+    style.fill: "#c8e6c9"
+  }
+  
+  input_data -> preprocessing: raw records
+  preprocessing -> blocking: cleaned data
+  blocking -> splitting: candidate pairs
+  splitting -> comparison: split batches
+  comparison -> classification: similarity scores
+  classification -> clustering: match decisions
+  clustering -> output: entity clusters
+}
+
+# Splitting Strategies Detail
+splitting_strategies: {
+  label: "Splitting Strategies"
+  
+  strategy_selector: Strategy Selector {
+    shape: diamond
+    style.fill: "#ffecb3"
+  }
+  
+  size_based: Size-Based Splitting {
+    shape: rectangle
+    style.fill: "#e1bee7"
+    
+    description: {
+      label: "Split by number of records\n(e.g., 10K records per batch)"
+      shape: text
+      style.font-size: 12
+    }
+  }
+  
+  memory_based: Memory-Based Splitting {
+    shape: rectangle
+    style.fill: "#b2dfdb"
+    
+    description: {
+      label: "Split to fit memory constraints\n(e.g., max 2GB per partition)"
+      shape: text
+      style.font-size: 12
+    }
+  }
+  
+  hash_based: Hash-Based Splitting {
+    shape: rectangle
+    style.fill: "#c5cae9"
+    
+    description: {
+      label: "Distribute using hash function\non blocking keys"
+      shape: text
+      style.font-size: 12
+    }
+  }
+  
+  semantic_based: Semantic Splitting {
+    shape: rectangle
+    style.fill: "#f8bbd0"
+    
+    description: {
+      label: "Split by entity type or domain\n(e.g., person vs organization)"
+      shape: text
+      style.font-size: 12
+    }
+  }
+  
+  strategy_selector -> size_based: "Small dataset"
+  strategy_selector -> memory_based: "Memory constrained"
+  strategy_selector -> hash_based: "Distributed processing"
+  strategy_selector -> semantic_based: "Heterogeneous data"
+}
+
+# Parallel Processing Architecture
+parallel_arch: {
+  label: "Parallel Processing with Splitting"
+  
+  master: Master Node {
+    shape: rectangle
+    style.fill: "#ffab91"
+    style.stroke: "#d84315"
+    style.stroke-width: 2
+  }
+  
+  splitter: Data Splitter {
+    shape: hexagon
+    style.fill: "#fff59d"
+  }
+  
+  worker1: Worker 1 {
+    shape: rectangle
+    style.fill: "#a5d6a7"
+  }
+  
+  worker2: Worker 2 {
+    shape: rectangle
+    style.fill: "#a5d6a7"
+  }
+  
+  worker3: Worker 3 {
+    shape: rectangle
+    style.fill: "#a5d6a7"
+  }
+  
+  worker_n: Worker N {
+    shape: rectangle
+    style.fill: "#a5d6a7"
+  }
+  
+  aggregator: Result Aggregator {
+    shape: hexagon
+    style.fill: "#fff59d"
+  }
+  
+  final_output: Final Results {
+    shape: cylinder
+    style.fill: "#81c784"
+  }
+  
+  master -> splitter: "Distribute workload"
+  splitter -> worker1: "Batch 1"
+  splitter -> worker2: "Batch 2"
+  splitter -> worker3: "Batch 3"
+  splitter -> worker_n: "Batch N"
+  worker1 -> aggregator: "Results 1"
+  worker2 -> aggregator: "Results 2"
+  worker3 -> aggregator: "Results 3"
+  worker_n -> aggregator: "Results N"
+  aggregator -> final_output: "Merged results"
+}
+
+# Blocking and Splitting Interaction
+blocking_split: {
+  label: "Blocking Keys and Splitting Logic"
+  
+  records: Record Database {
+    shape: cylinder
+    style.fill: "#bbdefb"
+  }
+  
+  blocking_stage: Blocking Strategy {
+    shape: rectangle
+    style.fill: "#ce93d8"
+    
+    soundex: Soundex Blocking {
+      shape: oval
+      style.fill: "#f3e5f5"
+    }
+    
+    ngram: N-gram Blocking {
+      shape: oval
+      style.fill: "#f3e5f5"
+    }
+    
+    sorted: Sorted Neighborhood {
+      shape: oval
+      style.fill: "#f3e5f5"
+    }
+  }
+  
+  block_results: Candidate Pairs {
+    shape: parallelogram
+    style.fill: "#ffe0b2"
+  }
+  
+  split_decision: Split Decision Engine {
+    shape: diamond
+    style.fill: "#ffccbc"
+  }
+  
+  batch1: Batch 1\n(Block A-F) {
+    shape: page
+    style.fill: "#c5e1a5"
+  }
+  
+  batch2: Batch 2\n(Block G-M) {
+    shape: page
+    style.fill: "#c5e1a5"
+  }
+  
+  batch3: Batch 3\n(Block N-Z) {
+    shape: page
+    style.fill: "#c5e1a5"
+  }
+  
+  records -> blocking_stage: "Apply blocking"
+  blocking_stage -> block_results: "Generate pairs"
+  block_results -> split_decision: "Evaluate size"
+  split_decision -> batch1: "Split 1"
+  split_decision -> batch2: "Split 2"
+  split_decision -> batch3: "Split 3"
+}
+
+# Load Balancing Considerations
+load_balancing: {
+  label: "Load Balancing in Splitting"
+  
+  imbalanced: Imbalanced Split {
+    shape: rectangle
+    style.fill: "#ef9a9a"
+    
+    shard1: Shard 1\n(90% data) {
+      shape: rectangle
+      style.fill: "#ffcdd2"
+    }
+    
+    shard2: Shard 2\n(10% data) {
+      shape: rectangle
+      style.fill: "#ffcdd2"
+    }
+    
+    problem: Problem: Uneven workload {
+      shape: text
+      style.font-size: 12
+      style.fill: "#d32f2f"
+    }
+  }
+  
+  balanced: Balanced Split {
+    shape: rectangle
+    style.fill: "#a5d6a7"
+    
+    shard1_b: Shard 1\n(50% data) {
+      shape: rectangle
+      style.fill: "#c8e6c9"
+    }
+    
+    shard2_b: Shard 2\n(50% data) {
+      shape: rectangle
+      style.fill: "#c8e6c9"
+    }
+    
+    benefit: Benefit: Even distribution {
+      shape: text
+      style.font-size: 12
+      style.fill: "#2e7d32"
+    }
+  }
+  
+  imbalanced -> balanced: "Rebalancing\nstrategy" {
+    style.stroke: "#1976d2"
+    style.stroke-width: 2
+  }
+}
+
+# Adaptive Splitting Algorithm
+adaptive_splitting: {
+  label: "Adaptive Splitting Algorithm"
+  
+  start: Start {
+    shape: oval
+    style.fill: "#90caf9"
+  }
+  
+  analyze: Analyze Dataset {
+    shape: rectangle
+    style.fill: "#e1bee7"
+  }
+  
+  estimate: Estimate Comparison Cost {
+    shape: rectangle
+    style.fill: "#ce93d8"
+  }
+  
+  check_threshold: Size > Threshold? {
+    shape: diamond
+    style.fill: "#ffcc80"
+  }
+  
+  single_partition: Process as\nSingle Partition {
+    shape: rectangle
+    style.fill: "#c5e1a5"
+  }
+  
+  calculate_splits: Calculate Optimal\nSplit Count {
+    shape: rectangle
+    style.fill: "#80deea"
+  }
+  
+  choose_strategy: Choose Split\nStrategy {
+    shape: rectangle
+    style.fill: "#b39ddb"
+  }
+  
+  apply_split: Apply Splitting {
+    shape: rectangle
+    style.fill: "#90caf9"
+  }
+  
+  distribute: Distribute to\nWorkers {
+    shape: rectangle
+    style.fill: "#81c784"
+  }
+  
+  end: End {
+    shape: oval
+    style.fill: "#a5d6a7"
+  }
+  
+  start -> analyze
+  analyze -> estimate
+  estimate -> check_threshold
+  check_threshold -> single_partition: "No"
+  check_threshold -> calculate_splits: "Yes"
+  single_partition -> end
+  calculate_splits -> choose_strategy
+  choose_strategy -> apply_split
+  apply_split -> distribute
+  distribute -> end
+}
+
+# Data Skew Handling
+skew_handling: {
+  label: "Handling Data Skew"
+  
+  skewed_data: Skewed Data Distribution {
+    shape: cylinder
+    style.fill: "#ffccbc"
+    
+    note: "Some blocking keys\nhave many more\nrecords than others" {
+      shape: text
+      style.font-size: 11
+    }
+  }
+  
+  detection: Skew Detection {
+    shape: hexagon
+    style.fill: "#fff59d"
+  }
+  
+  strategies: Mitigation Strategies {
+    shape: rectangle
+    style.fill: "#b2dfdb"
+    
+    repartition: Dynamic Repartitioning {
+      shape: rectangle
+      style.fill: "#80cbc4"
+    }
+    
+    oversample: Oversampling Small Blocks {
+      shape: rectangle
+      style.fill: "#80cbc4"
+    }
+    
+    subsample: Subsampling Large Blocks {
+      shape: rectangle
+      style.fill: "#80cbc4"
+    }
+    
+    cascade: Cascading Splits {
+      shape: rectangle
+      style.fill: "#80cbc4"
+    }
+  }
+  
+  balanced_output: Balanced Workload {
+    shape: cylinder
+    style.fill: "#a5d6a7"
+  }
+  
+  skewed_data -> detection: "Monitor distribution"
+  detection -> strategies: "Apply mitigation"
+  strategies.repartition -> balanced_output
+  strategies.oversample -> balanced_output
+  strategies.subsample -> balanced_output
+  strategies.cascade -> balanced_output
+}
+
+# Performance Metrics
+metrics: {
+  label: "Splitting Performance Metrics"
+  
+  input_metrics: Input Characteristics {
+    shape: rectangle
+    style.fill: "#e1f5fe"
+    
+    items: "• Record count\n• Pair count\n• Data size\n• Blocking key distribution" {
+      shape: text
+      style.font-size: 11
+    }
+  }
+  
+  splitting_metrics: Splitting Quality {
+    shape: rectangle
+    style.fill: "#fff9c4"
+    
+    items: "• Partition balance\n• Cross-partition pairs\n• Memory efficiency\n• Split overhead" {
+      shape: text
+      style.font-size: 11
+    }
+  }
+  
+  execution_metrics: Execution Performance {
+    shape: rectangle
+    style.fill: "#c8e6c9"
+    
+    items: "• Total runtime\n• CPU utilization\n• I/O throughput\n• Parallel efficiency" {
+      shape: text
+      style.font-size: 11
+    }
+  }
+  
+  output_metrics: Output Quality {
+    shape: rectangle
+    style.fill: "#f8bbd0"
+    
+    items: "• Precision\n• Recall\n• F1-score\n• Entity clusters" {
+      shape: text
+      style.font-size: 11
+    }
+  }
+  
+  input_metrics -> splitting_metrics: "Informs"
+  splitting_metrics -> execution_metrics: "Affects"
+  execution_metrics -> output_metrics: "Produces"
+}
+
+# Common Splitting Patterns
+patterns: {
+  label: "Common Splitting Patterns"
+  
+  pattern1: Round-Robin {
+    shape: rectangle
+    style.fill: "#e1bee7"
+    desc: "Distribute records\nsequentially" {
+      shape: text
+      style.font-size: 10
+    }
+  }
+  
+  pattern2: Range-Based {
+    shape: rectangle
+    style.fill: "#ce93d8"
+    desc: "Split by key ranges\n(A-M, N-Z)" {
+      shape: text
+      style.font-size: 10
+    }
+  }
+  
+  pattern3: Random {
+    shape: rectangle
+    style.fill: "#ba68c8"
+    desc: "Random assignment\nfor uniform distribution" {
+      shape: text
+      style.font-size: 10
+    }
+  }
+  
+  pattern4: Hierarchical {
+    shape: rectangle
+    style.fill: "#ab47bc"
+    desc: "Multi-level splitting\nfor large datasets" {
+      shape: text
+      style.font-size: 10
+    }
+  }
+  
+  use_cases: Use Cases {
+    shape: rectangle
+    style.fill: "#ffecb3"
+  }
+  
+  pattern1 -> use_cases: "Simple & fast"
+  pattern2 -> use_cases: "Sorted data"
+  pattern3 -> use_cases: "Unknown distribution"
+  pattern4 -> use_cases: "Very large scale"
+}
+
+# Notes and Best Practices
+notes: {
+  label: "Best Practices"
+  shape: rectangle
+  style.fill: "#fff3e0"
+  style.stroke: "#ff6f00"
+  style.stroke-width: 2
+  
+  practices: "**Key Considerations:**\n\n1. **Minimize Cross-Partition Comparisons**\n   • Keep related records together\n   • Use blocking keys effectively\n\n2. **Balance Computational Load**\n   • Monitor partition sizes\n   • Implement dynamic rebalancing\n\n3. **Optimize for Memory**\n   • Consider memory per partition\n   • Stream large comparisons\n\n4. **Maintain Accuracy**\n   • Don't split potential matches\n   • Preserve blocking relationships\n\n5. **Scale Incrementally**\n   • Start with simple strategies\n   • Add complexity as needed" {
+    shape: text
+    style.font-size: 11
+  }
+}
+
+# Legend
+legend: {
+  near: bottom-right
+  label: "Legend"
+  shape: rectangle
+  style.fill: "#fafafa"
+  style.stroke: "#757575"
+  
+  items: "Data Store: cylinder\nProcess: rectangle\nDecision: diamond\nFlow: arrows" {
+    shape: text
+    style.font-size: 10
+  }
+}
