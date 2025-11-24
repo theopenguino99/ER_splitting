@@ -2,6 +2,40 @@ site_name: ER Splitting
 nav:
   - Home: index.md
   - ER Pipeline: er_pipeline.md
+  - ERN Overview: splitting/ern_overview.md
 theme:
   name: material
+  palette:
+    scheme: slate
+    primary: cyan
+  features:
+    - navigation.tabs
+    - navigation.path
+    - content.code.copy
+
+plugins:
+  - search
+  - awesome-nav
+  - obsidian-bridge
+  - panzoom:
+      full_screen: True
+  - d2:
+      dark_theme: 200
+
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.superfences
+  - obsidian_callouts
+  - attr_list
+  - md_in_html
+  - pymdownx.blocks.caption
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 

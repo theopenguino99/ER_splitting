@@ -1,2 +1,2 @@
 # ER_splitting
-Documenting lit review on splitting logic
+Documenting lit review on negative rules for Entity Resolution
